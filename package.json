@@ -2,7 +2,7 @@
   "name": "user-server",
   "version": "0.1.0",
   "description": "",
-  "main": "src/start.ts",
+  "main": "src/server.ts",
   "scripts": {
     "test": "nodemon"
   },
