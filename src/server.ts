@@ -9,7 +9,7 @@ import middleware from "./middleware";
 middleware(app);
 routes(app);
 
-app.get("*", (req, res) => {
+app.all("*", (req, res) => {
     res.send({ status: 404, message: "Not Found" });
 });
 
