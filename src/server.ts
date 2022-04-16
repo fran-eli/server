@@ -3,8 +3,8 @@ import config from "./modules/config";
 
 const app = express();
 
-import routes from "./routes/routes";
-import middleware from "./middleware/middleware";
+import routes from "./routes";
+import middleware from "./middleware";
 
 middleware(app);
 routes(app);
