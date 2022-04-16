@@ -14,5 +14,5 @@ app.all("*", (req, res) => {
 });
 
 app.listen(config.port, () =>
-    console.log(`\nListening at port ${config.port}!\n`)
+    console.log(`\nListening at port ${config.port}!\n`),
 );
