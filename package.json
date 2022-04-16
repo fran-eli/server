@@ -17,11 +17,14 @@
   },
   "homepage": "https://github.com/fran-eli/user-server#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "dotenv": "^16.0.0",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "mongoose": "^6.3.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2",
