@@ -1,6 +1,9 @@
 import express from "express";
 import config from "./modules/config";
 
+import { setup } from "./modules/db";
+setup();
+
 const app = express();
 
 import routes from "./routes";
