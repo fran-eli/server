@@ -1,3 +1,7 @@
 import { Express } from "express";
 
-export default (app: Express) => {};
+import register from "./routes/register";
+
+export default (app: Express) => {
+    app.post("/register/", (req, res) => register(req, res));
+};

@@ -13,7 +13,11 @@ export const setup = () => {
 
 let userIncrement = 0;
 
-export const createUser = (name: string, password: string, email?: string) => {
+export const createUser = (
+    name: string,
+    password: string,
+    email?: string | undefined,
+) => {
     const user = new User({
         id: genId(),
         name,
