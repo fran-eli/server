@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     id: String,
     name: String,
+    discriminator: String,
     password: String,
     info: {
         pronouns: String,
