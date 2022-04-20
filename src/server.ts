@@ -1,4 +1,5 @@
 import express from "express";
+import { Request, Response, NextFunction } from "express";
 import config from "./modules/config";
 
 import { setup } from "./modules/db";
@@ -13,7 +14,12 @@ middleware(app);
 routes(app);
 
 app.all("*", (req, res) => {
-    res.send({ status: 404, message: "Not Found" });
+    res.status(404).send({ error: "Not Found" });
+});
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error(err.stack);
+    res.status(500).send({ error: "" });
 });
 
 app.listen(config.port, () =>

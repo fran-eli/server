@@ -63,7 +63,7 @@ function genId() {
     return `${Date.now() - 1640995200}${userIncrement++}`;
 }
 
-async function isDiscrimTaken(name: string, discrim: string) {
+async function isDiscrimTaken(name: string, discrim: string): Promise<boolean> {
     return await new Promise((resolve) => {
         User.findOne({ name: name, discriminator: discrim }).exec(
             (err, user) => {
