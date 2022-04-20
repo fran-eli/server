@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    id: String,
-    name: String,
-    discriminator: String,
-    password: String,
+    // unique & required is false by default
+    id: { type: String, index: { unique: true }, required: true },
+    name: { type: String, required: true },
+    discriminator: { type: String, required: true },
+    password: { type: String, required: true },
     info: {
         pronouns: String,
         bio: String,
     },
     avatarURL: String,
-    email: String,
+    email: { type: String, index: { unique: true } },
     createdAt: Date,
     updatedAt: Date,
 });
