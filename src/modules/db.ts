@@ -16,8 +16,8 @@ export const setup = () => {
 
 enum UserCreationError {
     None = "",
-    DiscriminatorTaken = "Username and discriminator combination are taken.",
-    DiscriminatorInvalid = "Discriminator input invalid.",
+    DiscriminatorTaken = "Username and discriminator combination are taken",
+    DiscriminatorInvalid = "Discriminator input invalid",
 }
 
 let userIncrement = 0;
@@ -78,9 +78,9 @@ async function isDiscrimTaken(name: string, discrim: string): Promise<boolean> {
 
 export enum UserAuthError {
     None = "",
-    MissingCredentials = "Missing username and discriminator pair, or email.",
-    IncorrectPassword = "Incorrect password.",
-    NotFound = "User not found.",
+    MissingCredentials = "Missing username and discriminator pair, or email",
+    IncorrectPassword = "Incorrect password",
+    NotFound = "User not found",
 }
 
 export const authUser = async (
@@ -104,6 +104,6 @@ export const authUser = async (
 
         if (bcrypt.compareSync(password, user.password))
             return resolve(user.id);
-        else return resolve(UserAuthError.NotFound);
+        else return resolve(UserAuthError.IncorrectPassword);
     });
 };
