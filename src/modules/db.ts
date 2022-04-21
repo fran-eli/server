@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-import { User } from "./models";
+import { User, IUser } from "./models";
 import RandExp from "randexp";
 
 export const setup = () => {
@@ -73,3 +73,37 @@ async function isDiscrimTaken(name: string, discrim: string): Promise<boolean> {
         );
     });
 }
+
+// ---
+
+export enum UserAuthError {
+    None = "",
+    MissingCredentials = "Missing username and discriminator pair, or email.",
+    IncorrectPassword = "Incorrect password.",
+    NotFound = "User not found.",
+}
+
+export const authUser = async (
+    password: string,
+    name?: string,
+    discrim?: string,
+    email?: string,
+): Promise<UserAuthError | string> => {
+    return await new Promise(async (resolve) => {
+        let user;
+
+        if (name && discrim) {
+            user = await User.findOne({ name, discriminator: discrim });
+        } else if (email) {
+            user = await User.findOne({ email });
+        } else {
+            return resolve(UserAuthError.MissingCredentials);
+        }
+
+        if (user === null) return resolve(UserAuthError.NotFound);
+
+        if (bcrypt.compareSync(password, user.password))
+            return resolve(user.id);
+        else return resolve(UserAuthError.NotFound);
+    });
+};
