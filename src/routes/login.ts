@@ -16,7 +16,7 @@ export default async (req: Request, res: Response) => {
         req.body.email,
     );
 
-    if (!(output in UserAuthError))
+    if (Object.values(UserAuthError).includes(output as UserAuthError))
         return res.status(401).send({ error: output });
 
     let payload: { [key: string]: string } = {};
