@@ -6,7 +6,7 @@ import { authUser, UserAuthError } from "../modules/db";
 import { genToken } from "../modules/token";
 
 export default async (req: Request, res: Response) => {
-    if (!(req.body.guildIds instanceof Array))
+    if (!(req.body.audienceIds instanceof Array))
         return res.status(400).send({ error: "No target guild id provided" });
 
     const output = await authUser(
@@ -16,11 +16,12 @@ export default async (req: Request, res: Response) => {
         req.body.email,
     );
 
-    if (output in UserAuthError) return res.status(401).send({ error: output });
+    if (!(output in UserAuthError))
+        return res.status(401).send({ error: output });
 
     let payload: { [key: string]: string } = {};
 
-    req.body.guildIds.forEach((x: string) => {
+    req.body.audienceIds.forEach((x: string) => {
         payload[x] = genToken(output, req.body.guildId);
     });
 
