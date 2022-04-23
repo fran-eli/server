@@ -22,7 +22,7 @@ export default async (req: Request, res: Response) => {
     let payload: { [key: string]: string } = {};
 
     req.body.audienceIds.forEach((x: string) => {
-        payload[x] = genToken(output, req.body.audienceIds);
+        payload[x] = genToken(output, x);
     });
 
     return res.send({ tokens: payload });
