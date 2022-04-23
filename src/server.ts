@@ -5,6 +5,15 @@ import config from "./modules/config";
 import { setup } from "./modules/db";
 setup();
 
+/* Allows Request to have a userId property */
+declare global {
+    namespace Express {
+        interface Request {
+            userId: string;
+        }
+    }
+}
+
 const app = express();
 
 import routes from "./routes";
