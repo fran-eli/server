@@ -14,7 +14,7 @@ export const setup = () => {
 
 // ---
 
-enum UserCreationError {
+export enum UserCreationError {
     None = "",
     DiscriminatorTaken = "Username and discriminator combination are taken",
     DiscriminatorInvalid = "Discriminator input invalid",
@@ -27,7 +27,7 @@ export const createUser = async (
     password: string,
     discrim?: string | undefined,
     email?: string | undefined,
-): Promise<UserCreationError> => {
+): Promise<UserCreationError | string> => {
     if (discrim === undefined) {
         while (true) {
             discrim = new RandExp(/([A-Z0-9]){4}/).gen();
@@ -41,8 +41,10 @@ export const createUser = async (
             return UserCreationError.DiscriminatorTaken;
     }
 
+    const id = genId();
+
     const user = new User({
-        id: genId(),
+        id: id,
         name,
         discriminator: discrim,
         email,
@@ -52,7 +54,7 @@ export const createUser = async (
     });
 
     user.save();
-    return UserCreationError.None;
+    return id;
 };
 
 function hashPassword(password: string) {

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
-import { createUser } from "../modules/db";
+import { createUser, UserCreationError } from "../modules/db";
+import { genToken } from "../modules/token";
 
 export default async (req: Request, res: Response) => {
     if (!req.body.name || !req.body.password)
@@ -15,6 +16,9 @@ export default async (req: Request, res: Response) => {
         req.body.email,
     );
 
-    if (output === "") res.status(204).send();
-    else res.status(400).send({ error: output });
+    if (Object.values(UserCreationError).includes(output as UserCreationError))
+        return res.status(400).send({ error: output });
+
+    //if (output === "") res.status(204).send();
+    res.status(200).send({ token: genToken(output, "1") });
 };
