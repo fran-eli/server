@@ -8,8 +8,9 @@ export interface IUser extends mongoose.Document {
     info?: object;
     avatarUrl?: string;
     email?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    passwordUpdatedAt: Date;
 }
 
 const userSchema = new mongoose.Schema({
@@ -24,8 +25,9 @@ const userSchema = new mongoose.Schema({
     },
     avatarURL: String,
     email: { type: String, index: { unique: true } },
-    createdAt: Date,
-    updatedAt: Date,
+    createdAt: { type: Date, required: true },
+    updatedAt: { type: Date, required: true },
+    passwordUpdatedAt: { type: Date, required: true },
 });
 
 export const User = mongoose.model<IUser>("User", userSchema);
