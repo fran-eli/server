@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
+    "build": "tsc",
     "test": "nodemon"
   },
   "repository": {
