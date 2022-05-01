@@ -16,8 +16,9 @@ export const setup = () => {
 
 export enum UserCreationError {
     None = "",
-    DiscriminatorTaken = "Username and discriminator combination are taken",
+    DiscriminatorTaken = "Username and discriminator combination taken",
     DiscriminatorInvalid = "Discriminator input invalid",
+    EmailTaken = "Email taken",
 }
 
 let userIncrement = 0;
@@ -40,6 +41,9 @@ export const createUser = async (
         if (await isDiscrimTaken(name, discrim))
             return UserCreationError.DiscriminatorTaken;
     }
+
+    if (email)
+        if (await isEmailTaken(email)) return UserCreationError.EmailTaken;
 
     const id = genId();
 
@@ -73,6 +77,15 @@ async function isDiscrimTaken(name: string, discrim: string): Promise<boolean> {
                 else resolve(true);
             },
         );
+    });
+}
+
+async function isEmailTaken(email: string): Promise<boolean> {
+    return await new Promise((resolve) => {
+        User.findOne({ email: email }).exec((err, user) => {
+            if (user === null) resolve(false);
+            else resolve(true);
+        });
     });
 }
 
