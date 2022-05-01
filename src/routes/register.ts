@@ -2,12 +2,16 @@ import { Request, Response } from "express";
 
 import { createUser, UserCreationError } from "../modules/db";
 import { genToken } from "../modules/token";
+import config from "../modules/config";
 
 export default async (req: Request, res: Response) => {
     if (!req.body.name || !req.body.password)
         return res.status(400).send({
             error: "Missing name or password",
         });
+
+    if (req.body.serverPassword !== config.api.password)
+        return res.status(401).send({ error: "Invalid server password" });
 
     const output = await createUser(
         req.body.name,
@@ -19,6 +23,5 @@ export default async (req: Request, res: Response) => {
     if (Object.values(UserCreationError).includes(output as UserCreationError))
         return res.status(400).send({ error: output });
 
-    //if (output === "") res.status(204).send();
     res.status(200).send({ token: genToken(output, "1") });
 };
