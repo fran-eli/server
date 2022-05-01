@@ -56,6 +56,7 @@ export const createUser = async (
         password: hashPassword(password),
         createdAt: new Date(),
         updatedAt: new Date(),
+        passwordUpdatedAt: new Date(),
     });
 
     user.save();
@@ -121,5 +122,21 @@ export const authUser = async (
         if (bcrypt.compareSync(password, user.password))
             return resolve([200, user.id]);
         else return resolve([401, UserAuthError.IncorrectPassword]);
+    });
+};
+
+// ---
+
+export const userTokenInvalid = async (
+    id: string,
+    iat: number,
+): Promise<boolean | undefined> => {
+    return await new Promise((resolve) => {
+        User.findOne({ id }).exec((err, user) => {
+            if (user === null) return resolve(undefined);
+
+            if (user.passwordUpdatedAt < new Date(iat)) return resolve(true);
+            else return resolve(false);
+        });
     });
 };

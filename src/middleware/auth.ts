@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import config from "../modules/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-export default (req: Request, res: Response, next: NextFunction) => {
+import config from "../modules/config";
+import { userTokenInvalid } from "../modules/db";
+
+export default async (req: Request, res: Response, next: NextFunction) => {
     if (
         req.url.startsWith("/users/register") ||
         req.url.startsWith("/users/login")
@@ -30,14 +32,17 @@ export default (req: Request, res: Response, next: NextFunction) => {
             case "jwt expired":
                 return res.status(401).send({ error: "Token expired" });
             default:
-                throw e; // WILL throw error if anything that i havent come up with comes up
+                throw e;
         }
     }
 
-    if (!tokenPayload["sub"])
+    if (!tokenPayload.sub || !tokenPayload.iat)
         return res.status(401).send({ error: "Invalid token" });
 
-    req.userId = tokenPayload.sub;
+    if (await userTokenInvalid(tokenPayload.sub, tokenPayload.iat))
+        return res
+            .status(401)
+            .send({ error: "Password has been changed since token creation" }); // CONTINUE
 
     next();
 };
