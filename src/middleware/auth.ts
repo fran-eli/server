@@ -34,10 +34,6 @@ export default (req: Request, res: Response, next: NextFunction) => {
         }
     }
 
-    if (tokenPayload["aud"] !== "1")
-        return res.status(401).send({
-            error: "Invalid token (token not intended for central server)",
-        });
     if (!tokenPayload["sub"])
         return res.status(401).send({ error: "Invalid token" });
 
