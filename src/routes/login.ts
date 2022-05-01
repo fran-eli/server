@@ -18,13 +18,13 @@ export default async (req: Request, res: Response) => {
         req.body.email,
     );
 
-    if (Object.values(UserAuthError).includes(output as UserAuthError))
-        return res.status(401).send({ error: output });
+    if (Object.values(UserAuthError).includes(output[1] as UserAuthError))
+        return res.status(output[0] as number).send({ error: output[1] });
 
     let payload: { [key: string]: string } = {};
 
     req.body.serverIds.forEach((x: string) => {
-        payload[x] = genToken(output, x);
+        payload[x] = genToken(output[1], x);
     });
 
     return res.send({ tokens: payload });

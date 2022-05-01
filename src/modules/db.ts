@@ -28,7 +28,7 @@ export const createUser = async (
     password: string,
     discrim?: string | undefined,
     email?: string | undefined,
-): Promise<UserCreationError | string> => {
+): Promise<[400 | 409, UserCreationError] | string> => {
     if (discrim === undefined) {
         while (true) {
             discrim = new RandExp(/([A-Z0-9]){4}/).gen();
@@ -36,14 +36,15 @@ export const createUser = async (
         }
     } else {
         if (discrim.length !== 4 || discrim.match(/([^A-Z0-9])/g))
-            return UserCreationError.DiscriminatorInvalid;
+            return [400, UserCreationError.DiscriminatorInvalid];
 
         if (await isDiscrimTaken(name, discrim))
-            return UserCreationError.DiscriminatorTaken;
+            return [409, UserCreationError.DiscriminatorTaken];
     }
 
     if (email)
-        if (await isEmailTaken(email)) return UserCreationError.EmailTaken;
+        if (await isEmailTaken(email))
+            return [409, UserCreationError.EmailTaken];
 
     const id = genId();
 
@@ -103,7 +104,7 @@ export const authUser = async (
     name?: string,
     discrim?: string,
     email?: string,
-): Promise<UserAuthError | string> => {
+): Promise<[200 | 400 | 401, UserAuthError | string]> => {
     return await new Promise(async (resolve) => {
         let user;
 
@@ -112,13 +113,13 @@ export const authUser = async (
         } else if (email) {
             user = await User.findOne({ email });
         } else {
-            return resolve(UserAuthError.MissingCredentials);
+            return resolve([400, UserAuthError.MissingCredentials]);
         }
 
-        if (user === null) return resolve(UserAuthError.NotFound);
+        if (user === null) return resolve([200, UserAuthError.NotFound]);
 
         if (bcrypt.compareSync(password, user.password))
-            return resolve(user.id);
-        else return resolve(UserAuthError.IncorrectPassword);
+            return resolve([200, user.id]);
+        else return resolve([401, UserAuthError.IncorrectPassword]);
     });
 };
