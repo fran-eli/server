@@ -3,7 +3,10 @@ import config from "../modules/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export default (req: Request, res: Response, next: NextFunction) => {
-    if (req.url.startsWith("/register") || req.url.startsWith("/login"))
+    if (
+        req.url.startsWith("/users/register") ||
+        req.url.startsWith("/users/login")
+    )
         return next();
 
     const tokenHeader = req.header("Authorization");
