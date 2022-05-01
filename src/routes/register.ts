@@ -27,5 +27,5 @@ export default async (req: Request, res: Response) => {
     )
         return res.status(output[0] as number).send({ error: output[1] });
 
-    res.status(200).send({ token: genToken(output[1], "1") });
+    res.status(200).send({ token: genToken(output[1]) });
 };
