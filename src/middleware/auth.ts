@@ -22,13 +22,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     let tokenPayload: JwtPayload;
 
     try {
-        tokenPayload = jwt.verify(token, config.api.jwt_public) as JwtPayload;
+        tokenPayload = jwt.verify(token, config.api.jwt_secret) as JwtPayload;
     } catch (e: any) {
         switch (e.message) {
-            case "invalid signature" ||
-                "jwt malformed" ||
-                "jwt signature is required":
-                return res.status(401).send({ error: "Invalid token" });
+            case "invalid signature":
+            case "jwt malformed":
+            case "jwt signature is required":
+            case "invalid algorithm":
+                return res.status(401).send({ error: `Invalid token (${e.message})` });
             case "jwt expired":
                 return res.status(401).send({ error: "Token expired" });
             default:
