@@ -30,7 +30,7 @@ export const createUser = async (
     password: string,
     discrim?: string | undefined,
     email?: string | undefined,
-): Promise<[400 | 409, UserCreationError] | string> => {
+): Promise<[200 | 400 | 409, UserCreationError | string]> => {
     if (discrim === undefined) {
         while (true) {
             discrim = new RandExp(/([A-Z0-9]){4}/).gen();
@@ -64,7 +64,7 @@ export const createUser = async (
     });
 
     user.save();
-    return id;
+    return [200, id];
 };
 
 function hashPassword(password: string) {
@@ -110,7 +110,6 @@ export const authUser = async (
     discrim?: string,
     email?: string,
 ): Promise<[200 | 400 | 401, UserAuthError | string]> => {
-    return await new Promise(async (resolve) => {
         let user;
 
         if (name && discrim) {
@@ -118,15 +117,14 @@ export const authUser = async (
         } else if (email) {
             user = await User.findOne({ email });
         } else {
-            return resolve([400, UserAuthError.MissingCredentials]);
+            return [400, UserAuthError.MissingCredentials];
         }
 
-        if (user === null) return resolve([200, UserAuthError.NotFound]);
+        if (user === null) return [400, UserAuthError.NotFound];
 
         if (bcrypt.compareSync(password, user.password))
-            return resolve([200, user.id]);
-        else return resolve([401, UserAuthError.IncorrectPassword]);
-    });
+            return [200, user.id];
+        else return [401, UserAuthError.IncorrectPassword];
 };
 
 // ---
