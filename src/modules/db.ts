@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import RandExp from "randexp";
 
 import { User, IUser } from "./models";
-import RandExp from "randexp";
+import { isPasswordValid } from "./token";
 
 export const setup = () => {
     mongoose.connect("mongodb://0.0.0.0:27017/franeli");
@@ -19,6 +20,7 @@ export enum UserCreationError {
     DiscriminatorTaken = "Username and discriminator combination taken",
     DiscriminatorInvalid = "Discriminator input invalid",
     EmailTaken = "Email taken",
+    PasswordInvalid = "Password invalid (length < 3)",
 }
 
 let userIncrement = 0;
@@ -45,6 +47,8 @@ export const createUser = async (
     if (email)
         if (await isEmailTaken(email))
             return [409, UserCreationError.EmailTaken];
+    
+    if (!isPasswordValid(password)) return [400, UserCreationError.PasswordInvalid];
 
     const id = genId();
 

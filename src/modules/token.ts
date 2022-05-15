@@ -6,3 +6,7 @@ export const genToken = (userId: string) => {
         expiresIn: "20d",
     });
 };
+
+export const isPasswordValid = (password: string) => {
+    return password.length >= 3;
+}
