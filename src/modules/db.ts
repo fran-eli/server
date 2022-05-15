@@ -5,7 +5,7 @@ import { User, IUser } from "./models";
 import RandExp from "randexp";
 
 export const setup = () => {
-    mongoose.connect("mongodb://0.0.0.0:27017/usersdb");
+    mongoose.connect("mongodb://0.0.0.0:27017/franeli");
 
     const db = mongoose.connection;
     db.on("error", console.error.bind(console, "Connection error:"));
