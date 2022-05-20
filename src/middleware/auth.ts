@@ -43,7 +43,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (await userTokenInvalid(tokenPayload.sub, tokenPayload.iat))
         return res
             .status(401)
-            .send({ error: "Password has been changed since token creation" }); // CONTINUE
+            .send({ error: "Password has been changed since token creation" });
 
     next();
 };
