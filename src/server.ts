@@ -1,4 +1,5 @@
 import express from "express";
+import expressWs from "express-ws";
 import { Request, Response, NextFunction } from "express";
 import config from "./modules/config";
 
@@ -14,7 +15,9 @@ declare global {
     }
 }
 
-const app = express();
+const appBase = express();
+const wsInstance = expressWs(appBase);
+const { app } = wsInstance;
 
 import routes from "./routes";
 import middleware from "./middleware";
