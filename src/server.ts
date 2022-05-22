@@ -1,5 +1,5 @@
 import express from "express";
-import expressWs from "express-ws";
+import { Server, Socket } from "socket.io";
 import { Request, Response, NextFunction } from "express";
 import config from "./modules/config";
 
@@ -34,6 +34,12 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(500).send({ error: "" });
 });
 
-app.listen(config.port, () =>
-    console.log(`\nListening at port ${config.port}!\n`),
+import ioHandler, { IoServer } from "./io";
+
+const io: IoServer = require("socket.io")(
+    app.listen(config.port, () => {
+        console.log(`\nListening at port ${config.port}!\n`);
+    }),
 );
+
+ioHandler(io);
