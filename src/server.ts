@@ -15,9 +15,7 @@ declare global {
     }
 }
 
-const appBase = express();
-const wsInstance = expressWs(appBase);
-const { app } = wsInstance;
+const app = express();
 
 import routes from "./routes";
 import middleware from "./middleware";
