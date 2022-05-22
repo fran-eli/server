@@ -1,4 +1,3 @@
-//import { Express } from "express";
 import { Server, Socket } from "socket.io";
 
 interface ServerToClientEvents {

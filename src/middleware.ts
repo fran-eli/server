@@ -1,11 +1,11 @@
-import { Application } from "express-ws";
+import { Express } from "express";
 
 import bodyParser from "body-parser";
 
 import logger from "./middleware/logger";
 import auth from "./middleware/auth";
 
-export default (app: Application) => {
+export default (app: Express) => {
     app.use(bodyParser.json());
 
     app.use(logger);
